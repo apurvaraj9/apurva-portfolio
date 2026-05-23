@@ -32,14 +32,16 @@ const projects = [
 
 export default function Projects() {
   const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
 
   const prev = () => setCurrent((i) => (i === 0 ? projects.length - 1 : i - 1));
   const next = () => setCurrent((i) => (i === projects.length - 1 ? 0 : i + 1));
 
   useEffect(() => {
+    if (paused) return;
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [paused]);
 
   return (
     <section id="projects" className="max-w-5xl mx-auto px-6 lg:px-8 py-28 mt-10">
@@ -50,7 +52,7 @@ export default function Projects() {
 
       <div className="relative">
 
-        <div className="overflow-hidden rounded-xl">
+        <div className="overflow-hidden rounded-xl" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onTouchStart={() => setPaused(true)} onTouchEnd={() => setPaused(false)}>
           <div className="transition-all duration-500">
             <ProjectCard {...projects[current]} />
           </div>
