@@ -31,7 +31,7 @@ export default function Hero() {
         </h1>
 
         <h2 className="text-[#94A3B8] text-lg md:text-xl xl:text-2xl max-w-3xl mt-4 leading-relaxed">
-          Motivated B.Tech graduate from VIT University (8.97 CGPA), bridging the gap between Full Stack development and cybersecurity. Equipped with strong programming capabilities in Java and Python alongside remote internship experience in SOC incident analysis, SIEM tools (Wazuh), and network infrastructure. Eager to leverage technical proficiency and compliance awareness (GDPR/DPDP) to build and maintain secure, scalable applications.
+          B.Tech CS graduate from VIT University with an 8.97 CGPA, based in Kolkata. I build full stack web applications and have hands-on experience in cybersecurity through SOC analysis and SIEM tools. Currently looking for opportunities where I can build secure, scalable software.
         </h2>
 
         <div className="flex flex-wrap gap-4 mt-8">
