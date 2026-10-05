@@ -9,7 +9,7 @@ import ScrollToTop from "@/components/ScrollToTop";
 
 export default function Home() {
   return (
-    <main className="bg-[#0B0F19] min-h-screen">
+    <main className="min-h-screen" style={{ backgroundColor: "var(--color-bg)" }}>
       <Navbar />
       <Hero />
       <div className="section-divider" />

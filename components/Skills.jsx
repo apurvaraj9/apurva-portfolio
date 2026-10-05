@@ -1,124 +1,130 @@
 "use client";
+import { useState, useEffect, useRef } from "react";
 
-import { useEffect, useRef, useState } from "react";
-import { Code2, Layout, Server, Database, Shield, Wrench } from "lucide-react";
-
-const skills = [
+const categories = [
   {
-    category: "Languages",
-    icon: Code2,
-    items: ["Java", "Python", "JavaScript", "HTML", "CSS", "SQL"],
+    title: "Languages",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+      </svg>
+    ),
+    skills: ["Java", "Python", "JavaScript", "SQL (MySQL)", "HTML", "CSS"],
   },
   {
-    category: "Frontend",
-    icon: Layout,
-    items: ["React", "Next.js", "Tailwind CSS", "Chart.js"],
+    title: "Frontend",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+      </svg>
+    ),
+    skills: ["React", "Next.js", "Tailwind CSS", "HTML/CSS", "Chart.js", "Vanilla JS"],
   },
   {
-    category: "Backend",
-    icon: Server,
-    items: ["Node.js", "Express", "Flask", "REST APIs"],
+    title: "Backend",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/>
+        <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
+      </svg>
+    ),
+    skills: ["Node.js", "Express.js", "Flask", "REST APIs", "WordPress"],
   },
   {
-    category: "Databases",
-    icon: Database,
-    items: ["SQLite", "MySQL", "pandas"],
+    title: "Databases",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+        <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+      </svg>
+    ),
+    skills: ["MySQL", "SQLite", "SQL"],
   },
   {
-    category: "Cyber Security",
-    icon: Shield,
-    items: ["Wazuh", "Wireshark", "SIEM", "SOC Analysis", "GDPR", "DPDP", "Firewall Basics", "Endpoint Security"],
+    title: "Cyber Security",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+    ),
+    skills: ["Wazuh (SIEM)", "Wireshark", "SOC Analysis", "Incident Triage", "GDPR / DPDP", "Endpoint Security"],
   },
   {
-    category: "Tools & Platforms",
-    icon: Wrench,
-    items: ["Git", "GitHub", "VS Code", "ffmpeg", "yt-dlp", "Linux"],
+    title: "Tools",
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+    ),
+    skills: ["Git", "GitHub Actions", "Google Cloud", "PyPI", "VS Code", "pandas", "NumPy", "pytest"],
   },
 ];
 
-function SkillCard({ group, cardIndex, sectionVisible }) {
-  const Icon = group.icon;
+function SkillCard({ category, index, sectionVisible }) {
   const [flipped, setFlipped] = useState(false);
-  const [visible, setVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [cardVisible, setCardVisible] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.matchMedia("(hover: none)").matches);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    setIsMobile(window.matchMedia("(hover: none)").matches);
   }, []);
 
   useEffect(() => {
     if (sectionVisible) {
-      const timer = setTimeout(() => setVisible(true), cardIndex * 120);
-      return () => clearTimeout(timer);
+      const t = setTimeout(() => setCardVisible(true), index * 100);
+      return () => clearTimeout(t);
     }
-  }, [sectionVisible, cardIndex]);
+  }, [sectionVisible, index]);
 
   const handleInteraction = () => {
-    if (isMobile) setFlipped((prev) => !prev);
+    if (isMobile) setFlipped(f => !f);
   };
 
   return (
     <div
-      className="relative h-48"
-      style={{
-        perspective: "1000px",
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(30px)",
-        transition: "opacity 0.6s ease, transform 0.6s ease",
-      }}
-      onMouseEnter={() => !isMobile && setFlipped(true)}
-      onMouseLeave={() => !isMobile && setFlipped(false)}
+      className={`transition-all duration-500 ${cardVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"}`}
+      style={{ perspective: "1000px", height: "200px" }}
       onClick={handleInteraction}
-    >
+      onMouseEnter={() => !isMobile && setFlipped(true)}
+      onMouseLeave={() => !isMobile && setFlipped(false)}>
       <div
+        className="relative w-full h-full"
         style={{
-          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
-          transition: "transform 0.7s cubic-bezier(0.23, 1, 0.32, 1)",
           transformStyle: "preserve-3d",
-          position: "relative",
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <div
-          style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
-          className="absolute inset-0 bg-slate-800/50 rounded-xl border border-slate-700/50 flex flex-col items-center justify-center gap-4"
-        >
-          <div className="p-4 rounded-xl bg-[#06B6D4]/10">
-            <Icon size={32} className="text-[#06B6D4]" />
-          </div>
-          <h3 className="text-[#06B6D4] font-mono text-sm font-medium tracking-wider uppercase">
-            {group.category}
-          </h3>
-          <p className="text-slate-600 text-xs font-mono">
+          transform: flipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          transition: "transform 0.6s cubic-bezier(0.4,0,0.2,1)",
+        }}>
+        {/* Front */}
+        <div className="absolute inset-0 rounded-xl border flex flex-col items-center justify-center gap-3 cursor-pointer"
+          style={{
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            backgroundColor: "var(--color-card)",
+            borderColor: "var(--color-border)",
+            boxShadow: "var(--shadow-card)",
+          }}>
+          <span style={{ color: "var(--color-cyan)" }}>{category.icon}</span>
+          <h3 className="font-semibold text-base" style={{ color: "var(--color-text)" }}>{category.title}</h3>
+          <p className="text-xs" style={{ color: "var(--color-muted)" }}>
             {isMobile ? "tap to explore" : "hover to explore"}
           </p>
         </div>
 
-        <div
+        {/* Back */}
+        <div className="absolute inset-0 rounded-xl border p-4 flex flex-col justify-center gap-2"
           style={{
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
-          }}
-          className="absolute inset-0 bg-slate-800/80 rounded-xl border border-[#06B6D4]/30 p-4 flex flex-col"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <Icon size={16} className="text-[#06B6D4]" />
-            <h3 className="text-[#06B6D4] font-mono text-xs font-medium tracking-wider uppercase">
-              {group.category}
-            </h3>
-          </div>
-          <div className="flex flex-wrap gap-2 overflow-y-auto">
-            {group.items.map((skill, i) => (
-              <span
-                key={i}
-                className="text-xs text-[#94A3B8] border border-slate-700 hover:border-[#06B6D4] hover:text-[#06B6D4] hover:shadow-[0_0_8px_rgba(6,182,212,0.3)] px-2 py-1 rounded-full font-mono transition-all duration-200 cursor-default"
-              >
-                {skill}
+            backgroundColor: "color-mix(in srgb, var(--color-cyan) 6%, var(--color-card))",
+            borderColor: "var(--color-cyan)",
+          }}>
+          <h3 className="font-semibold text-sm mb-1" style={{ color: "var(--color-cyan)" }}>{category.title}</h3>
+          <div className="flex flex-wrap gap-1.5">
+            {category.skills.map(s => (
+              <span key={s} className="px-2 py-0.5 rounded text-xs font-mono border"
+                style={{ color: "var(--color-text)", borderColor: "var(--color-border)", backgroundColor: "color-mix(in srgb, var(--color-cyan) 10%, transparent)" }}>
+                {s}
               </span>
             ))}
           </div>
@@ -129,49 +135,45 @@ function SkillCard({ group, cardIndex, sectionVisible }) {
 }
 
 export default function Skills() {
+  const sectionRef = useRef(null);
   const [sectionVisible, setSectionVisible] = useState(false);
   const [pulseKey, setPulseKey] = useState(0);
-  const ref = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setSectionVisible(true);
-          setPulseKey((k) => k + 1);
-          observer.disconnect();
+          setPulseKey(k => k + 1);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.2 }
     );
-    if (ref.current) observer.observe(ref.current);
+    if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section id="skills" className="max-w-5xl mx-auto px-6 lg:px-8 py-28 relative" ref={ref}>
-      <h2 className="text-[#F8FAFC] text-2xl md:text-3xl font-bold mb-8">
-        Skills
-      </h2>
+    <section id="skills" ref={sectionRef} className="py-20 px-4">
+      <div className="max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold mb-12 text-center" style={{ color: "var(--color-text)" }}>
+          Technical Skills
+        </h2>
 
-      <div className="relative">
-        {pulseKey > 0 && (
-          <>
-            <div key={`pulse1-${pulseKey}`} className="pulse-ring" />
-            <div key={`pulse2-${pulseKey}`} className="pulse-ring pulse-ring-delay-1" />
-            <div key={`pulse3-${pulseKey}`} className="pulse-ring pulse-ring-delay-2" />
-          </>
-        )}
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">
-          {skills.map((group, index) => (
-            <SkillCard
-              key={index}
-              group={group}
-              cardIndex={index}
-              sectionVisible={sectionVisible}
-            />
-          ))}
+        {/* Pulse wave container */}
+        <div className="relative mb-12">
+          {sectionVisible && (
+            <>
+              <div key={`pulse-${pulseKey}-0`} className="pulse-ring" />
+              <div key={`pulse-${pulseKey}-1`} className="pulse-ring pulse-ring-delay-1" />
+              <div key={`pulse-${pulseKey}-2`} className="pulse-ring pulse-ring-delay-2" />
+            </>
+          )}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {categories.map((cat, i) => (
+              <SkillCard key={cat.title} category={cat} index={i} sectionVisible={sectionVisible} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

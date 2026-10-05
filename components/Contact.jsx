@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useRef } from "react";
 
 function MatrixRain() {
@@ -7,96 +6,108 @@ function MatrixRain() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    let animationId;
 
     const resize = () => {
       canvas.width = window.innerWidth;
-      canvas.height = canvas.offsetHeight;
+      canvas.height = canvas.parentElement?.offsetHeight || 400;
     };
     resize();
     window.addEventListener("resize", resize);
 
-    const fontSize = 14;
     const chars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノ#$%&<>{}[]|=+-*/";
-    const columns = Math.floor(canvas.width / fontSize);
+    const fontSize = 14;
+    let columns = Math.floor(canvas.width / fontSize);
+    let drops = Array(columns).fill(1);
 
-    const drops = Array.from({ length: columns }, () =>
-      Math.floor(Math.random() * -50)
-    );
+    const getCyan = () => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue("--color-matrix").trim();
+      return v || "#06B6D4";
+    };
 
-    const animate = () => {
-      ctx.fillStyle = "rgba(11, 15, 25, 0.08)";
+    const getBg = () => {
+      const v = getComputedStyle(document.documentElement).getPropertyValue("--color-bg").trim();
+      return v || "#0B0F19";
+    };
+
+    const draw = () => {
+      const bg = getBg();
+      const cyan = getCyan();
+
+      // Parse bg color for fade overlay
+      ctx.fillStyle = bg.startsWith("#")
+        ? hexToRgba(bg, 0.05)
+        : "rgba(11,15,25,0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      drops.forEach((drop, i) => {
-        const char = chars[Math.floor(Math.random() * chars.length)];
-        const opacity = Math.random() * 0.3 + 0.05;
-        ctx.fillStyle = `rgba(6, 182, 212, ${opacity})`;
-        ctx.font = `${fontSize}px JetBrains Mono, monospace`;
-        ctx.fillText(char, i * fontSize, drop * fontSize);
+      ctx.fillStyle = cyan;
+      ctx.font = `${fontSize}px monospace`;
+      ctx.globalAlpha = 0.18;
 
-        if (drop * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
+      columns = Math.floor(canvas.width / fontSize);
+      while (drops.length < columns) drops.push(Math.floor(Math.random() * -50));
+      drops = drops.slice(0, columns);
+
+      drops.forEach((y, i) => {
+        const char = chars[Math.floor(Math.random() * chars.length)];
+        ctx.fillText(char, i * fontSize, y * fontSize);
+        if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
         drops[i]++;
       });
-
-      animationId = requestAnimationFrame(animate);
+      ctx.globalAlpha = 1;
     };
 
-    animate();
-
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
-    };
+    const id = setInterval(draw, 50);
+    return () => { clearInterval(id); window.removeEventListener("resize", resize); };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full pointer-events-none z-0"
-    />
-  );
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0" />;
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
 }
 
 export default function Contact() {
   return (
-    <section id="contact" className="relative w-full mt-20 overflow-hidden">
-
+    <section id="contact" className="relative w-full py-24 px-4 overflow-hidden">
       <MatrixRain />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-8 py-16 text-center">
-
-        <h2 className="text-[#F8FAFC] text-3xl font-bold">
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
+        <h2 className="text-3xl font-bold mb-4" style={{ color: "var(--color-text)" }}>
           Get In Touch
         </h2>
-
-        <p className="text-[#94A3B8] text-base max-w-md mx-auto mt-2">
-          I am currently looking for new opportunities. <br />
-          Drop an email, my inbox is always open!
+        <p className="mb-10 max-w-md mx-auto" style={{ color: "var(--color-muted)" }}>
+          Open to full-time roles and freelance projects. Whether it is a software position or a cybersecurity role — I would love to hear from you.
         </p>
 
-        <a href="mailto:apurvaraj304@gmail.com" className="inline-block mt-8 px-8 py-4 border border-[#06B6D4] text-[#06B6D4] font-mono font-medium rounded-lg hover:bg-[#06B6D4] hover:text-black hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] transition-all duration-300">
-          apurvaraj304@gmail.com
-        </a>
-
-        <div className="flex items-center justify-center gap-6 mt-8">
-          <a href="https://github.com/apurvaraj9" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#94A3B8] hover:text-[#06B6D4] font-mono text-sm border border-slate-700 hover:border-[#06B6D4] px-4 py-2 rounded-lg transition-all duration-200">
+        <div className="flex flex-wrap justify-center gap-4 mb-10">
+          <a href="mailto:apurvaraj304@gmail.com"
+            className="flex items-center gap-2 px-5 py-3 rounded-lg font-semibold transition-all duration-200 hover:opacity-90 hover:scale-105"
+            style={{ backgroundColor: "var(--color-cyan)", color: "#0B0F19" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Send Email
+          </a>
+          <a href="https://github.com/apurvaraj9" target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-3 rounded-lg font-semibold border transition-all duration-200 hover:scale-105"
+            style={{ borderColor: "var(--color-cyan)", color: "var(--color-cyan)" }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
             </svg>
-            GitHub Profile
+            GitHub
           </a>
         </div>
 
-        <p className="text-slate-500 text-xs mt-12 font-mono tracking-widest">
-          © 2026 APURVA RAJ. BUILT WITH NEXT.JS & TAILWIND.
+        <p className="text-sm font-mono" style={{ color: "var(--color-muted)" }}>
+          apurvaraj304@gmail.com
         </p>
-
       </div>
-
     </section>
   );
 }

@@ -1,47 +1,67 @@
 "use client";
-
 import { useState } from "react";
+import ThemeToggle from "./ThemeToggle";
+
+const links = [
+  { href: "#experience", label: "Experience" },
+  { href: "#skills",     label: "Skills" },
+  { href: "#projects",   label: "Projects" },
+  { href: "#education",  label: "Education" },
+  { href: "#contact",    label: "Contact" },
+];
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const closeMenu = () => setMenuOpen(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 backdrop-blur-md bg-[#0B0F19]/70">
-      <div className="max-w-5xl mx-auto px-6 lg:px-8 flex items-center justify-between h-14">
-
-        <a href="#" className="font-mono text-[#06B6D4] font-medium tracking-wider hover:text-[#06B6D4]/80 transition-colors duration-200">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-md"
+      style={{ backgroundColor: "color-mix(in srgb, var(--color-bg) 80%, transparent)", borderBottom: "1px solid var(--color-border)" }}>
+      <nav className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo */}
+        <a href="#" className="font-mono font-bold text-lg" style={{ color: "var(--color-cyan)" }}>
           [AR.]
         </a>
 
-        <ul className="hidden md:flex items-center gap-6">
-          <li><a href="#experience" className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// experience</a></li>
-          <li><a href="#skills" className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// skills</a></li>
-          <li><a href="#projects" className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// projects</a></li>
-          <li><a href="#education" className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// education</a></li>
-          <li><a href="#contact" className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// contact</a></li>
-        </ul>
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-6">
+          {links.map(l => (
+            <a key={l.href} href={l.href}
+              className="text-sm font-medium transition-colors duration-200 hover:opacity-100"
+              style={{ color: "var(--color-muted)" }}
+              onMouseEnter={e => e.currentTarget.style.color = "var(--color-cyan)"}
+              onMouseLeave={e => e.currentTarget.style.color = "var(--color-muted)"}>
+              {l.label}
+            </a>
+          ))}
+          <ThemeToggle />
+        </div>
 
-        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200 font-mono text-xl">
-          {menuOpen ? "✕" : "☰"}
-        </button>
+        {/* Mobile: theme toggle + hamburger */}
+        <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle />
+          <button onClick={() => setOpen(o => !o)}
+            className="text-xl p-1" style={{ color: "var(--color-cyan)" }}
+            aria-label="Toggle menu">
+            {open ? "✕" : "☰"}
+          </button>
+        </div>
+      </nav>
 
-      </div>
-
-      <div className="navbar-glow-border" />
-
-      {menuOpen && (
-        <div className="md:hidden border-t border-slate-800 bg-[#0B0F19]/95 px-6 py-4">
-          <ul className="flex flex-col gap-4">
-            <li><a href="#experience" onClick={closeMenu} className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// experience</a></li>
-            <li><a href="#skills" onClick={closeMenu} className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// skills</a></li>
-            <li><a href="#projects" onClick={closeMenu} className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// projects</a></li>
-            <li><a href="#education" onClick={closeMenu} className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// education</a></li>
-            <li><a href="#contact" onClick={closeMenu} className="font-mono text-sm text-[#94A3B8] hover:text-[#06B6D4] transition-colors duration-200">// contact</a></li>
-          </ul>
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-3" style={{ backgroundColor: "var(--color-bg)" }}>
+          {links.map(l => (
+            <a key={l.href} href={l.href} onClick={() => setOpen(false)}
+              className="text-sm font-medium py-1"
+              style={{ color: "var(--color-muted)" }}>
+              {l.label}
+            </a>
+          ))}
         </div>
       )}
 
-    </nav>
+      {/* Glow border */}
+      <div className="navbar-glow-border" />
+    </header>
   );
 }

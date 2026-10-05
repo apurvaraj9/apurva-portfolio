@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 
 const fullName = "Apurva Raj.";
@@ -7,87 +6,89 @@ const roles = [
   "Full Stack Developer_",
   "Cyber Security Analyst_",
   "Java & Python Engineer_",
+  "SOC Incident Analyst_",
 ];
 
 export default function Hero() {
-  const [displayedName, setDisplayedName] = useState("");
-  const [nameComplete, setNameComplete] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [nameTyped, setNameTyped] = useState(false);
   const [roleIndex, setRoleIndex] = useState(0);
-  const [displayedRole, setDisplayedRole] = useState("");
-  const [isErasing, setIsErasing] = useState(false);
+  const [displayRole, setDisplayRole] = useState("");
+  const [typing, setTyping] = useState(true);
+  const [charIndex, setCharIndex] = useState(0);
 
+  // Type the name once
   useEffect(() => {
-    if (displayedName.length < fullName.length) {
-      const timer = setTimeout(() => {
-        setDisplayedName(fullName.slice(0, displayedName.length + 1));
-      }, 100);
-      return () => clearTimeout(timer);
+    if (nameTyped) return;
+    if (displayName.length < fullName.length) {
+      const t = setTimeout(() => setDisplayName(fullName.slice(0, displayName.length + 1)), 100);
+      return () => clearTimeout(t);
     } else {
-      setNameComplete(true);
+      setNameTyped(true);
     }
-  }, [displayedName]);
+  }, [displayName, nameTyped]);
 
+  // Cycle through roles
   useEffect(() => {
-    if (!nameComplete) return;
-
-    const currentRole = roles[roleIndex];
-
-    if (!isErasing && displayedRole.length < currentRole.length) {
-      const timer = setTimeout(() => {
-        setDisplayedRole(currentRole.slice(0, displayedRole.length + 1));
-      }, 80);
-      return () => clearTimeout(timer);
+    if (!nameTyped) return;
+    const role = roles[roleIndex];
+    if (typing) {
+      if (charIndex < role.length) {
+        const t = setTimeout(() => { setDisplayRole(role.slice(0, charIndex + 1)); setCharIndex(c => c + 1); }, 80);
+        return () => clearTimeout(t);
+      } else {
+        const t = setTimeout(() => setTyping(false), 2000);
+        return () => clearTimeout(t);
+      }
+    } else {
+      if (charIndex > 0) {
+        const t = setTimeout(() => { setDisplayRole(role.slice(0, charIndex - 1)); setCharIndex(c => c - 1); }, 40);
+        return () => clearTimeout(t);
+      } else {
+        setRoleIndex(i => (i + 1) % roles.length);
+        setTyping(true);
+      }
     }
-
-    if (!isErasing && displayedRole.length === currentRole.length) {
-      const timer = setTimeout(() => setIsErasing(true), 2000);
-      return () => clearTimeout(timer);
-    }
-
-    if (isErasing && displayedRole.length > 0) {
-      const timer = setTimeout(() => {
-        setDisplayedRole(displayedRole.slice(0, -1));
-      }, 40);
-      return () => clearTimeout(timer);
-    }
-
-    if (isErasing && displayedRole.length === 0) {
-      setIsErasing(false);
-      setRoleIndex((prev) => (prev + 1) % roles.length);
-    }
-  }, [nameComplete, displayedRole, isErasing, roleIndex]);
+  }, [nameTyped, typing, charIndex, roleIndex]);
 
   return (
-    <section className="hero-pattern min-h-[85vh] flex items-center justify-center px-6">
-      <div className="max-w-5xl mx-auto w-full">
+    <section className="hero-pattern min-h-[85vh] flex flex-col items-center justify-center text-center px-4">
+      <p className="font-mono text-sm mb-4" style={{ color: "var(--color-cyan)" }}>
+        &gt; Hello, World. I am
+      </p>
 
-        <p className="text-[#06B6D4] font-mono text-sm md:text-base tracking-widest uppercase">
-          Hi, I am
-        </p>
+      <h1 className="text-5xl md:text-7xl font-extrabold mb-4 min-h-[1.2em]" style={{ color: "var(--color-text)" }}>
+        {displayName}
+        {!nameTyped && <span className="blink" style={{ color: "var(--color-cyan)" }}>|</span>}
+      </h1>
 
-        <h1 className="text-[#F8FAFC] text-5xl md:text-7xl xl:text-8xl font-extrabold tracking-tight mt-2">
-          {displayedName}<span className="text-[#06B6D4] blink">_</span>
-        </h1>
-
-        {nameComplete && (
-          <h2 className="text-[#06B6D4] font-mono text-xl md:text-2xl font-medium mt-4 h-8">
-            {displayedRole}
-          </h2>
+      <div className="font-mono text-xl md:text-2xl mb-8 min-h-[2em]" style={{ color: "var(--color-cyan)" }}>
+        {nameTyped && (
+          <>
+            {displayRole}
+            <span className="blink">|</span>
+          </>
         )}
+      </div>
 
-        <p className="text-[#94A3B8] text-lg md:text-xl xl:text-2xl max-w-3xl mt-4 leading-relaxed">
-          B.Tech CS graduate from VIT University with an 8.97 CGPA, based in Kolkata. I build full stack web applications and have hands-on experience in cybersecurity through SOC analysis and SIEM tools. Currently looking for opportunities where I can build secure, scalable software.
-        </p>
+      <p className="max-w-xl text-base mb-10" style={{ color: "var(--color-muted)" }}>
+        B.Tech CSE graduate from VIT University. Building secure, scalable applications with Java,
+        Python, and Node.js — while analyzing threats in the SOC.
+      </p>
 
-        <div className="flex flex-wrap gap-4 mt-8">
-          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="bg-[#06B6D4] text-black font-mono font-medium text-sm px-6 py-3 rounded-lg hover:bg-[#06B6D4]/80 transition-colors duration-200">
-            View Resume
-          </a>
-          <a href="#contact" className="border border-[#06B6D4] text-[#06B6D4] font-mono font-medium text-sm px-6 py-3 rounded-lg hover:bg-[#06B6D4]/10 transition-colors duration-200">
-            Connect
-          </a>
-        </div>
-
+      <div className="flex flex-wrap justify-center gap-4">
+        <a href="#projects"
+          className="px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:opacity-90 hover:scale-105"
+          style={{ backgroundColor: "var(--color-cyan)", color: "#0B0F19" }}>
+          View My Projects
+        </a>
+        <a href="#contact"
+          className="px-6 py-3 rounded-lg font-semibold border transition-all duration-200 hover:scale-105"
+          style={{ borderColor: "var(--color-cyan)", color: "var(--color-cyan)" }}
+          onMouseEnter={e => { e.currentTarget.style.backgroundColor = "var(--color-cyan)"; e.currentTarget.style.color = "#0B0F19"; }}
+          onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--color-cyan)"; }}>
+          Contact Me
+        </a>
       </div>
     </section>
   );
