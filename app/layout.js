@@ -5,7 +5,7 @@ export const metadata = {
   description:
     "Professional portfolio of Apurva Raj, a highly motivated B.Tech graduate from VIT University based in Kolkata. Full Stack Developer specializing in Java, Python, Node.js, React, and Cyber Security (SOC Analysis, SIEM, Wazuh).",
   keywords:
-    "Apurva Raj, Apurva Raj Kolkata, VIT University graduate, Software Developer Kolkata, Full Stack Developer, Cyber Security Intern, fnCyber, Video Summarizer, Time Tracker, Log Guard",
+    "Apurva Raj, Apurva Raj Kolkata, VIT University graduate, Software Developer Kolkata, Full Stack Developer, Cyber Security Junior Analyst, fnCyber, Video Summarizer, Time Tracker, Log Guard",
   authors: [{ name: "Apurva Raj" }],
   openGraph: {
     title: "Apurva Raj | Software Developer & Cyber Security Specialist",
