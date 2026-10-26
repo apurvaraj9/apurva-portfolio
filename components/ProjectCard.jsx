@@ -103,6 +103,18 @@ export default function ProjectCard({ project }) {
               GitHub
             </a>
           )}
+          {project.live && (
+            <a href={project.live} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded border transition-all duration-200 hover:opacity-80"
+              style={{ color: "var(--color-cyan)", borderColor: "var(--color-border)", backgroundColor: "color-mix(in srgb, var(--color-cyan) 8%, transparent)" }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              Live
+            </a>
+          )}
           {project.pypi && (
             <a href={project.pypi} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded border transition-all duration-200 hover:opacity-80"

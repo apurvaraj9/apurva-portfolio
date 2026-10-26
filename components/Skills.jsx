@@ -18,7 +18,7 @@ const categories = [
         <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
       </svg>
     ),
-    skills: ["React", "Next.js", "Tailwind CSS", "HTML/CSS", "Chart.js", "Vanilla JS"],
+    skills: ["React", "Next.js", "Tailwind CSS", "HTML/CSS", "Chart.js", "Leaflet", "Vanilla JS"],
   },
   {
     title: "Backend",
@@ -28,7 +28,7 @@ const categories = [
         <line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/>
       </svg>
     ),
-    skills: ["Node.js", "Express.js", "Flask", "REST APIs", "WordPress"],
+    skills: ["Node.js", "Express.js", "Flask", "Django", "REST APIs", "LangGraph", "WordPress"],
   },
   {
     title: "Databases",
@@ -38,7 +38,7 @@ const categories = [
         <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
       </svg>
     ),
-    skills: ["MySQL", "SQLite", "SQL"],
+    skills: ["MySQL", "SQLite", "Supabase", "SQL"],
   },
   {
     title: "Cyber Security",
@@ -56,7 +56,7 @@ const categories = [
         <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
       </svg>
     ),
-    skills: ["Git", "GitHub Actions", "Google Cloud", "PyPI", "VS Code", "pandas", "NumPy", "pytest"],
+    skills: ["Git", "GitHub Actions", "Docker", "Google Cloud", "PyPI", "VS Code", "pandas", "NumPy", "pytest"],
   },
 ];
 
