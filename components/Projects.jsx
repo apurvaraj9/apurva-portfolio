@@ -66,6 +66,18 @@ const projects = [
       "Designed a clean REST API with clear separation of concerns between audio extraction, transcription, and summarization layers.",
     ],
   },
+  {
+    title: "Time Tracker",
+    year: "2026",
+    tech: ["Python", "Flask", "SQLite", "pandas", "Chart.js"],
+    github: "https://github.com/apurvaraj9/time-tracker",
+    bullets: [
+      "Built a Windows desktop app that detects the active window title every 5 seconds and auto-categorizes screen time into productive categories (Coding, Meetings, Browsing, etc.) using keyword matching.",
+      "Designed a SQLite database schema and wrote Python functions to persist and query session data, enabling daily usage reports with a text-based bar chart in the terminal.",
+      "Built a Flask REST API with two JSON endpoints serving categorized time data to a browser-based dashboard, demonstrating full-stack Python-to-web integration.",
+      "Created an interactive web dashboard using Chart.js displaying a doughnut chart and live session log with 30-second auto-refresh for real-time productivity visibility.",
+    ],
+  },
 ];
 
 export default function Projects() {
