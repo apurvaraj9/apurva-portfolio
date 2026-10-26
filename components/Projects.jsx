@@ -21,6 +21,7 @@ const projects = [
     year: "2026",
     tech: ["React", "Django", "TomTom API", "Open-Meteo", "Leaflet", "Docker"],
     github: "https://github.com/apurvaraj9/weather-truck-routing",
+    live: "https://weather-truck-routing-zywt.onrender.com/",
     bullets: [
       "Built a React + Django web app that fetches 3 alternative routes from the TomTom Routing API, places weather checkpoints along each route, and computes the truck's ETA at every checkpoint.",
       "Integrated Open-Meteo forecasts to classify each checkpoint as Low / Moderate / High / Severe based on wind speed (with load-weight rules), rainfall and snowfall, then recommends the safest route using a defined preference order.",
@@ -33,7 +34,6 @@ const projects = [
     year: "2026",
     tech: ["Django", "Python", "OSRM", "GeoJSON", "Leaflet", "Render"],
     github: "https://github.com/apurvaraj9/fuel-route-api",
-    live: "https://fuel-route-api-h6na.onrender.com/",
     bullets: [
       "Built a Django 6.1 REST API that accepts any US start/finish location and returns cost-optimal fuel stops for a truck with a 500-mile range and 10 MPG, using dynamic programming over 8,000+ real OPIS station prices.",
       "Resolved city names offline against ~39k US centroids derived from public ZIP-code data, called OSRM for free routing geometry, and filtered stations to a 10-mile corridor around the route before running the optimiser.",
